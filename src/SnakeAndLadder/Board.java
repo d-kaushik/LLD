@@ -7,14 +7,14 @@ import java.util.Queue;
 
 public class Board {
     private Dice dice;
-    Queue<Player> players;
+    List<Player> players;
     Map<Integer, Integer> snakeMap;
     Map<Integer, Integer> ladderMap;
     Map<String, Integer> playerMap;
     int boardSize;
     int winnerPosition;
 
-    Board(Dice dice, Queue<Player> players, List<Snake> snakes, List<Ladder> ladders, int boardSize){
+    Board(Dice dice, List<Player> players, List<Snake> snakes, List<Ladder> ladders, int boardSize){
         this.dice = dice;
         this.players = players;
         this.boardSize = boardSize;
@@ -40,7 +40,7 @@ public class Board {
                 System.out.println("2 or more players are required to play");
                 return;
             }
-            Player player = players.remove();
+            Player player = players.removeFirst();
             if(! move(player)){
                 players.add(player);
             } else{
@@ -52,6 +52,14 @@ public class Board {
     boolean move(Player player){
         int steps = dice.rollDice();
         int playerPosition = player.getPosition() + steps;
+        for (int i=0; i<players.size();i++){
+            Player tempPlayer = players.get(i);
+            if(tempPlayer.getPosition() == playerPosition){
+                System.out.println(player.getPlayerName() + " rolled a "+ steps + " and moved from " + player.getPosition()+ " to "+ playerPosition + " and "+tempPlayer.getPlayerName()+" will start from 0");
+                tempPlayer.setPosition(0);
+                break;
+            }
+        }
         if(playerPosition == winnerPosition) {
             System.out.println(player.getPlayerName() + " rolled a "+ steps + " and moved from " + player.getPosition()+ " to "+ playerPosition + " and won the game!");
             player.setPosition(playerPosition);
@@ -64,7 +72,7 @@ public class Board {
                 System.out.println(player.getPlayerName()+" rolled a "+ steps + " and bitten by snake at "+ playerPosition+ " and moved from "+ playerPosition + " to " + snakeMap.get(playerPosition));
                 player.setPosition(snakeMap.get(playerPosition));
                 return false;
-            } else if(ladderMap.containsKey(playerPosition)){
+            } else if(ladderMap.containsKey(playerPosition)) {
                 System.out.println(player.getPlayerName()+" rolled a "+ steps +" and climbed the ladder at "+ playerPosition+ " and moved from "+playerPosition+ " to "+ladderMap.get(playerPosition));
                 player.setPosition(ladderMap.get(playerPosition));
                 if(ladderMap.get(playerPosition) == winnerPosition){

@@ -48,11 +48,11 @@ public class Main {
         ladders.add(ladder8);
 
         int numberOfPlayers= 2;
-        Player player1 = new Player(0,"Kaushik",0);
-        Player player2 = new Player(1, "Piyush", 0);
-        Queue<Player> allPlayers = new LinkedList<>();
-        allPlayers.offer(player1);
-        allPlayers.offer(player2);
+        Player player1 = new Player(0,"Player1",0);
+        Player player2 = new Player(1, "Player2", 0);
+        List<Player> allPlayers = new LinkedList<>();
+        allPlayers.add(player1);
+        allPlayers.add(player2);
 
         int boardSize = 10;
         int numberOfDice = 2;
